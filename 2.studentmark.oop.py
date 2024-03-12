@@ -1,12 +1,12 @@
 class Person:
-    def initialize(self, name, dob):
+    def __init__(self, name, dob):
         self.name = name
         self.dob = dob
 
 
 class Student(Person):
-    def initialize(self, name, dob, student_id):
-        super().initialize(name, dob)
+    def __init__(self, name, dob, student_id):
+        super().__init__(name, dob)
         self.student_id = student_id
         self.marks = {}
 
@@ -15,7 +15,7 @@ class Student(Person):
 
 
 class StudentManagementSystem:
-    def initialize(self):
+    def __init__(self):
         self.students = []
         self.courses = {}
 
@@ -25,8 +25,7 @@ class StudentManagementSystem:
             student_id = input("Enter student id: ")
             name = input("Enter student name: ")
             dob = input("Enter student date of birth: ")
-            student = Student()
-            student.initialize(name, dob, student_id)
+            student = Student(name, dob, student_id)
             self.students.append(student)
 
         num_courses = int(input("Enter number of courses: "))
@@ -82,6 +81,6 @@ class StudentManagementSystem:
             self.show_student_marks(course_id)
 
 sms = StudentManagementSystem()
-sms.initialize()
 sms.input_student_info()
 sms.manage_students_courses()
+
