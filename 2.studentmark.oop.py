@@ -1,71 +1,87 @@
-def input_student_info():
-    students = {}
-    courses = {}
-
-    num_students = int(input("Enter number of students: "))
-    for i in range(num_students):
-        student_id = input("Enter student id: ")
-        name = input("Enter student name: ")
-        dob = input("Enter student date of birth: ")
-        students[student_id] = {'name': name, 'dob': dob, 'marks': {}}
-
-    num_courses = int(input("Enter number of courses: "))
-    for i in range(num_courses):
-        course_id = input("Enter course id: ")
-        name = input("Enter course name: ")
-        courses[course_id] = name
-
-        for student_id, student_info in students.items():
-            mark = input(f"Enter marks for {student_info['name']} in {name}: ")
-            students[student_id]['marks'][course_id] = mark
-
-    return students, courses
+class Person:
+    def initialize(self, name, dob):
+        self.name = name
+        self.dob = dob
 
 
-def manage_students_courses():
-    students, courses = input_student_info()
+class Student(Person):
+    def initialize(self, name, dob, student_id):
+        super().initialize(name, dob)
+        self.student_id = student_id
+        self.marks = {}
 
-    def list_courses():
-        print("Courses:")
-        for id, name in courses.items():
-            print(f"ID: {id}, Name: {name}")
+    def enter_marks(self, course_id, mark):
+        self.marks[course_id] = mark
 
-    def list_students():
-        print("Students:")
-        for id, info in students.items():
-            print(f"ID: {id}, Name: {info['name']}, DOB: {info['dob']}")
 
-    def show_student_marks(course_id):
-        print(f"Marks for course {courses[course_id]}:")
-        for id, info in students.items():
-            if course_id in info['marks']:
-                print(f"{info['name']}: {info['marks'][course_id]}")
-            else:
-                print(f"{info['name']}: No marks entered")
+class StudentManagementSystem:
+    def initialize(self):
+        self.students = []
+        self.courses = {}
 
-    while True:
-        print("1. List courses")
-        print("2. List students")
-        print("3. Show student marks for a course")
-        print("4. Exit")
-        choice = int(input("Enter your choice: "))
-        if choice == 1:
-            list_courses()
-        elif choice == 2:
-            list_students()
-        elif choice == 3:
+    def input_student_info(self):
+        num_students = int(input("Enter number of students: "))
+        for _ in range(num_students):
+            student_id = input("Enter student id: ")
+            name = input("Enter student name: ")
+            dob = input("Enter student date of birth: ")
+            student = Student()
+            student.initialize(name, dob, student_id)
+            self.students.append(student)
+
+        num_courses = int(input("Enter number of courses: "))
+        for _ in range(num_courses):
             course_id = input("Enter course id: ")
-            show_student_marks(course_id)
-        elif choice == 4:
-            break
-        else:
-            print("Invalid choice. Please enter again.")
+            name = input("Enter course name: ")
+            self.courses[course_id] = name
 
-    list_students()
-    list_courses()
-    for course_id in courses:
-        show_student_marks(course_id)
+            for student in self.students:
+                mark = input(f"Enter marks for {student.name} in {name}: ")
+                student.enter_marks(course_id, mark)
 
+    def list_courses(self):
+        print("Courses:")
+        for course_id, name in self.courses.items():
+            print(f"ID: {course_id}, Name: {name}")
 
-manage_students_courses()
- 
+    def list_students(self):
+        print("Students:")
+        for student in self.students:
+            print(f"ID: {student.student_id}, Name: {student.name}, DOB: {student.dob}")
+
+    def show_student_marks(self, course_id):
+        print(f"Marks for course {self.courses[course_id]}:")
+        for student in self.students:
+            if course_id in student.marks:
+                print(f"{student.name}: {student.marks[course_id]}")
+            else:
+                print(f"{student.name}: No marks entered")
+
+    def manage_students_courses(self):
+        while True:
+            print("1. List courses")
+            print("2. List students")
+            print("3. Show student marks for a course")
+            print("4. Exit")
+            choice = int(input("Enter your choice: "))
+            if choice == 1:
+                self.list_courses()
+            elif choice == 2:
+                self.list_students()
+            elif choice == 3:
+                course_id = input("Enter course id: ")
+                self.show_student_marks(course_id)
+            elif choice == 4:
+                break
+            else:
+                print("Invalid choice. Please enter again.")
+
+        self.list_students()
+        self.list_courses()
+        for course_id in self.courses:
+            self.show_student_marks(course_id)
+
+sms = StudentManagementSystem()
+sms.initialize()
+sms.input_student_info()
+sms.manage_students_courses()
